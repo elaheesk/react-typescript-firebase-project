@@ -1,0 +1,38 @@
+[debug] [2024-12-16T09:26:19.051Z] ----------------------------------------------------------------------
+[debug] [2024-12-16T09:26:19.054Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\elahe\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2024-12-16T09:26:19.055Z] CLI Version:   13.29.1
+[debug] [2024-12-16T09:26:19.055Z] Platform:      win32
+[debug] [2024-12-16T09:26:19.056Z] Node Version:  v22.11.0
+[debug] [2024-12-16T09:26:19.056Z] Time:          Mon Dec 16 2024 10:26:19 GMT+0100 (centraleuropeisk normaltid)
+[debug] [2024-12-16T09:26:19.056Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-12-16T09:26:19.069Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-12-16T09:26:19.070Z] > authorizing via signed-in user (elahe199108@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\elahe\source\repos\projects\we-ahead-project
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2024-12-16T09:26:39.553Z] Checked if tokens are valid: false, expires at: 1734306908540
+[debug] [2024-12-16T09:26:39.554Z] Checked if tokens are valid: false, expires at: 1734306908540
+[debug] [2024-12-16T09:26:39.554Z] > refreshing access token with scopes: []
+[debug] [2024-12-16T09:26:39.556Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-12-16T09:26:39.556Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-12-16T09:26:39.861Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-12-16T09:26:39.861Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-12-16T09:26:39.878Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2024-12-16T09:26:40.575Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2024-12-16T09:26:40.576Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
