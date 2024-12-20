@@ -1,63 +1,32 @@
-import { FC, useState, useEffect, useContext } from "react";
-import FormData from "../components/FormData";
-import ListItems from "../components/ListItems";
-import ProductCard from "../components/ProductCard";
-import { ProductsContext } from "../ProductsContext";
-import CheckoutList from "../components/CheckoutList";
+import { homeAvatarUrl, homepageText } from "../data";
+import { Link } from "react-router-dom";
 
-
-const categoryOptions = ["beauty", "fragrances", "furniture", "groceries"];
 const Home = () => {
-
-   
-    const [selectedRatings, setSelectedRatings] = useState<any>([]);
-    const [selectedRating, setSelectedRating] = useState<string>("All Ratings");
-    const { handleSelectedCategory, selectedProducts, checkoutItems } = useContext(ProductsContext);
-   
-
-
     return (
-        <>
-            <section>
-                <h1>welcome to home page</h1>
-         
-            </section>
-
-            <CheckoutList
-                checkoutItems={checkoutItems}
-            />
-            <select title="Select ratings" value={selectedRating} onChange={(e) => setSelectedRating(e.target.value)}>
-                <option value="">All ratings</option>
-                <option value="2">2 or higher</option>
-                <option value="3">3 or higher</option>
-                <option value="4">4 or higher</option>
-            </select>
-
-
-            {categoryOptions.map((tes: any, i: number) =>
-                <div key={i}>
-                    <label>{tes}</label>
-                    <input type="checkbox" value={tes} onChange={handleSelectedCategory} />
+        <section className="container max-w-xl p-6 mx-auto space-y-12 lg:px-8 lg:max-w-7xl">
+            <div>
+                <h2 className="text-3xl font-bold text-center sm:text-5xl">Welcome to My Portfolio Application!</h2>
+                <p className="max-w-3xl mx-auto mt-4 text-xl text-center ">This app is designed to showcase my development skills by integrating various features and functionalities. Each page demonstrates a different aspect of my expertise in front-end and back-end development.</p>
+            </div>
+            <div className="grid lg:gap-8 lg:grid-cols-2 lg:items-center">
+                <div>
+                    <h3 className="text-xl font-bold ml-4">What You Can Do:</h3>
+                    <div className="mt-4 space-y-12">
+                        {homepageText.map((textRow, idx) =>
+                            <div key={idx} className="flex">
+                                <div className="ml-4">
+                                    <Link to={textRow.route} className="text-lg font-medium leadi ">{textRow.title}</Link>
+                                    <p>{textRow.description}</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
-
-            )}
-            <section style={{ marginLeft: "50px", marginTop: "30px" }}>
-                <span style={{ fontWeight: "bold" }}>Products: </span>
-                <span>{selectedProducts.length}</span>
-            </section>
-
-            <ul style={{ display: "flex", flexWrap: "wrap" }}>
-                {selectedProducts.map((product: any) =>
-                    <ProductCard
-                        key={product.id}
-                        product={product }
-                    />
-                )}
-            
-            </ul>
-         
-
-        </>
+                <div aria-hidden="true" className="mt-10 lg:mt-0">
+                    <img alt="Computer avatar" width="600" height="600" src={homeAvatarUrl} className="mx-auto rounded-lg shadow-lg dark-bg-gray-500" style={{ color: "transparent" }}></img>
+                </div>
+            </div>
+        </section>
     )
 }
 export default Home;

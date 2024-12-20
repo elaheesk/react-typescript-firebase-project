@@ -1,36 +1,26 @@
 import { Link } from "react-router-dom";
-
+import { routes } from "../data";
 
 const NavBar = () => {
     return (
-        <>
-            <header className="navbar">
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to="/" reloadDocument>
-                                Home
+        <header className="navbar">
+            <nav>
+                <ul>
+                    <li>
+                        <Link to="/" reloadDocument>
+                            Home
+                        </Link>
+                    </li>
+                    {routes.map((route, idx) =>
+                        <li key={idx}>
+                            <Link key={idx} to={route.route} reloadDocument>
+                                {route.title}
                             </Link>
                         </li>
-                        <li>
-                            <Link to="/products" reloadDocument>
-                                Products
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/checkout" reloadDocument>
-                                Checkout
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/about" reloadDocument>
-                                About
-                            </Link>
-                        </li>
-                    </ul>
-                </nav>
-            </header>
-        </>
+                    )}
+                </ul>
+            </nav>
+        </header>
     )
 }
 export default NavBar;

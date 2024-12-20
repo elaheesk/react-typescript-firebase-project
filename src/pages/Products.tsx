@@ -1,102 +1,36 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
+import TableHead from "../components/TableHead";
+import TableRowProduct from "../components/TableRowProduct";
+import { IProduct } from "../types";
+import { ProductsContext } from "../ProductsContext";
+import FilterNavbar from "../components/FilterNavbar";
+import Dropdown from "../components/Dropdown";
 
-import ProductCard from "../components/ProductCard";
-
-
-
-
-
-/*const categoryOptions = ["beauty", "fragrances", "furniture", "groceries"];*/
-//todos: loading, error couldnt get data right now, change all names
-
-const Products = ({ addItemToCheckoutList, selectedProducts, setSelectedProducts, handleSelectedCategory,products }:any) => {
-   
-   
-
-    
-
-
-
-
-
-
-
-    const [saveId, setSaveId] = useState("");
-
-
-
-   
-
-    const handleEditComment = (id: string) => {
-
-
-    }
-
-
-
-
-   
-
-
-   
-
-
-
-
-    //useEffect(() => {
-
-    //    if (selectedRating === "All Ratings") {
-    //        return;
-    //    } else {
-    //        const filterSelectedRatings = selectedProducts.filter((prod: any) =>
-    //            prod.rating === selectedRating || prod.rating > selectedRating);
-    //        setSelectedRatings([...filterSelectedRatings])
-    //    }
-    //}, [selectedRating])
-
-
-
-
-
-
+const Products = () => {
+    const { selectedProducts } = useContext(ProductsContext);
+    const [openDropdown, setOpenDropdown] = useState(false);
 
     return (
-        <></>
-        //<>
-         
-        //    <select title="Select ratings" value={selectedRating} onChange={(e) => setSelectedRating(e.target.value)}>
-        //        <option value="">All ratings</option>
-        //        <option value="2">2 or higher</option>
-        //        <option value="3">3 or higher</option>
-        //        <option value="4">4 or higher</option>
-        //    </select>
-
-
-        //    {categoryOptions.map((tes: any, i: number) =>
-        //        <div key={i}>
-        //            <label>{tes}</label>
-        //            <input type="checkbox" value={tes} onChange={handleSelectedCategory} />
-        //        </div>
-
-        //    )}
-        //    <section style={{ marginLeft: "50px", marginTop: "30px" }}>
-        //        <span style={{ fontWeight: "bold" }}>Products: </span>
-        //        <span>{selectedProducts.length}</span>
-        //    </section>
-      
-        //    <ul style={{ display: "flex", flexWrap: "wrap" }}>
-        //        {selectedProducts.map((product: any) =>
-        //            <ProductCard
-        //                key={product.id}
-        //                product={product}
-        //                products={products}
-                  
-        //                handleEditComment={handleEditComment}
-        //                addItemToCheckoutList={addItemToCheckoutList }
-        //                />
-        //        )}
-        //    </ul>
-        //</>
+        <div className="flex flex-col mt-6 justify-self-center w-[48rem] mb-4 ">
+            <section className="flex justify-between mt-4">
+                <FilterNavbar />
+                <div className="pl-4 mt-3">Total products: {selectedProducts.length}</div>
+                <div className="flex flex-col pl-3 mt-4 relative">
+                    <button onClick={() => setOpenDropdown(!openDropdown)} className="bg-white hover:bg-gray-100 text-gray-800 font-semibold px-4 py-1 border border-gray-400 rounded shadow">Sort by</button>
+                    {openDropdown ? <Dropdown /> : null}
+                </div>
+            </section>
+            <div className=" overflow-x-auto max-w-[47rem] self-center  shadow-md sm:rounded-lg">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <TableHead />
+                    <tbody>
+                        {selectedProducts.map((product: IProduct) =>
+                            <TableRowProduct key={product.id} product={product} />
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     )
 }
 export default Products;

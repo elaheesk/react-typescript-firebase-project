@@ -1,39 +1,44 @@
-import { ChangeEvent, FC } from "react";
-
-const FormField:FC = () => {
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-
-    };
-
-    const handleSubmit = (
-        event: React.FormEvent<HTMLFormElement>,
-    ) => {
-        event.preventDefault();
-
-    };
+const FormField = ({
+    name,
+    type = "text",
+    placeholder,
+    value,
+    onChange,
+    onBlur,
+    errorMessage,
+    hasError,
+    touched,
+    isTextarea = false, }:any) => {
+ 
     return (
-        <form aria-live="polite" onSubmit={handleSubmit} noValidate>
-            <div className="">
-                <label htmlFor="" className="">
-                    some label
-                </label>
-                <input
-                    type="text"
-                    id=""
-                    name=""
-                    placeholder="saasdasd"
-                    className=""
-                    value=""
-                    onChange={handleChange}                    aria-describedby="email-error"
-                    /* aria-invalid={error.email ? "true" : "false" }*/
-                    /*onBlur={onBlur}*/
+        <div className="mb-6">
+            <label htmlFor={name} className="block text-[#505476] text-md font-bold mb-1">
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+            </label>
+            {isTextarea ? (
+                <textarea
+                    name={name}
+                    placeholder={placeholder}
+                    className="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
                     required
                 />
-                <div id="email-error" style={{ color: "red" }}>error message</div>
-            </div>
-            <button aria-label="send form" type="submit">Submit</button>
-        </form>
+            ) : (
+                <input
+                    name={name}
+                    type={type}
+                    placeholder={placeholder}
+                    className="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    required
+                />
+            )}
+            {touched && hasError && <div style={{ color: "red" }}>{errorMessage}</div>}
+        </div>
     )
 }
 export default FormField;

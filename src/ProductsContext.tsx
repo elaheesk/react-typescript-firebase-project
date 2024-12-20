@@ -1,99 +1,116 @@
-import React, { createContext,  ReactNode } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
+import { IProduct } from "./types";
+import { collection, doc, DocumentSnapshot, getDoc, setDoc } from "firebase/firestore";
+import { db } from "./firebase";
+import { useFetchProducts } from "./hooks/useFetchProducts ";
 
 const ProductsContext = createContext<any>(null);
 type ProductsProviderProps = {
-	children: ReactNode; // Allow children to be any valid React node
+    children: ReactNode;
 };
 const ProductsProvider: React.FC<ProductsProviderProps> = ({ children }) => {
+    const [products, setProducts] = React.useState<any[]>([]);
+    const [checkoutList, setCheckoutList] = useState<IProduct[]>([]);
+    const [selectedProducts, setSelectedProducts] = React.useState<IProduct[]>([]);
+    const [selectedCategories, setSelectedCategories] = React.useState<any>([]);
+    const CHECKOUT_DOC_ID = "sharedCheckoutList";
+    useFetchProducts(setProducts, setSelectedProducts);
 
-	const [products, setProducts] = React.useState<any[]>([]);
-	const [checkoutItems, setCheckoutItems] = React.useState<any>([]);
-	const [selectedProducts, setSelectedProducts] = React.useState<any>([]);
-	const [selectedCategories, setSelectedCategories] = React.useState<any>([]);
+    const incrementAmount = (id: number) => {
+        setCheckoutList((prevList) => {
+            const updatedList = prevList.map((p) =>
+                p.id === id ? { ...p, count: p.count + 1 } : p
+            );
+            saveToFirestore(updatedList);
+            return updatedList;
+        });
+    };
 
-	const addItemToCheckoutList = (productToAdd: any) => {
-		if (checkoutItems.length === 0) {
-			setCheckoutItems([{ ...productToAdd, count: 1 }]);
-			return;
-		}
+    const decrementAmount = (id: number) => {
+        setCheckoutList((prevList) => {
+            const updatedList = prevList
+                .map((p) =>
+                    p.id === id ? { ...p, count: Math.max(p.count - 1, 1) } : p
+                )
+                .filter((p) => p.count > 0);
+            saveToFirestore(updatedList);
+            return updatedList;
+        });
+    };
+    const saveToFirestore = async (updatedList: IProduct[]) => {
+        try {
+            const docRef = doc(collection(db, "checkout"), CHECKOUT_DOC_ID);
+            await setDoc(docRef, { items: updatedList });
+        } catch (error) {
+        }
+    };
 
-		let itemFound = false;
-		const updatedItems = checkoutItems.map((item: any) => {
-			if (item.id === productToAdd.id) {
-				itemFound = true;
-				return { ...item, count: item.count + 1 };
-			}
-			return item;
-		});
+    const addToCheckout = async (product: IProduct) => {
+        setCheckoutList((prevList) => {
+            const existingProduct = prevList.find((p) => p.id === product.id);
 
-		if (itemFound) {
-			setCheckoutItems(updatedItems); // Update with modified list
-		} else {
-			setCheckoutItems([...checkoutItems, { ...productToAdd, count: 1 }]); // Add new product
-		}
-	};
-	React.useEffect(() => {
+            const updatedList = existingProduct
+                ? prevList.map((p) =>
+                    p.id === product.id ? { ...p, count: p.count + 1 } : p
+                )
+                : [...prevList, { ...product, count: 1 }];
+            saveToFirestore(updatedList);
+            return updatedList;
+        });
+    };
+    const removeProductFromList = (id: number) => {
+        setCheckoutList((prevList) => {
+            const updatedList = prevList.filter((p) => p.id !== id);
+            saveToFirestore(updatedList);
+            return updatedList;
+        });
+    };
 
-		if (selectedCategories.length) {
-			const cat = products.filter((eachObj: any) => {
-				return selectedCategories.includes(eachObj.category)
-			});
-			setSelectedProducts(cat);
-		} else {
-			setSelectedProducts(products);
-		}
+    const handleSelectedCategory = (e: any) => {
+        const val = e.target.value;
+        const foundCategory = selectedCategories.find((cate: string) => cate === val);
+        if (foundCategory) {
+            const newCatArr = selectedCategories.filter((selected: string) => selected !== foundCategory)
+            setSelectedCategories(newCatArr)
+        }
+        else {
+            setSelectedCategories((prev: any) => [...prev, val]);
+        }
+    }
 
-	}, [selectedCategories])
+    React.useEffect(() => {
+        if (selectedCategories.length) {
+            const cat = products.filter((eachObj: any) => {
+                return selectedCategories.includes(eachObj.category)
+            });
+            setSelectedProducts(cat);
+        } else {
+            setSelectedProducts(products);
+        }
+    }, [selectedCategories])
 
 
-	const handleSelectedCategory = (e: any) => {
-		const val = e.target.value;
+    useEffect(() => {
+        const fetchFromFirestore = async () => {
+            try {
+                const docRef = doc(collection(db, "checkout"), CHECKOUT_DOC_ID);
+                const docSnap: DocumentSnapshot = await getDoc(docRef);
 
-		const foundCategory = selectedCategories.find((cate: string) => cate === val);
-		if (foundCategory) {
-			const newCatArr = selectedCategories.filter((selected: string) => selected !== foundCategory)
-			setSelectedCategories(newCatArr)
-		}
-		else {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    setCheckoutList(data.items || []);
+                } else {
+                    setCheckoutList([]);
+                }
+            } catch (error) {
+            }
+        };
+        fetchFromFirestore();
+    }, []);
 
-			setSelectedCategories((prev: any) => [...prev, val]);
-		}
-
-	}
-	React.useEffect(() => {
-
-		const fetchData = async () => {
-			try {
-				const response = await fetch("https://dummyjson.com/products");
-
-				if (!response.ok) {
-					throw new Error("Failed response");
-				}
-				const data = await response.json();
-				const editedProducts = data.products.map((product: any) => {
-
-					return {
-						...product, reviews: product.reviews.map((review: any, index: number) => {
-							return { ...review, reviewId: `${product.id}-${index}` }
-						})
-
-					}
-				})
-
-				setSelectedProducts(editedProducts)
-				setProducts(editedProducts);
-
-			} catch (error) {
-				throw new Error("Failed to fetch data");
-			}
-		};
-		fetchData();
-
-	}, [])
-	return (
-		<ProductsContext.Provider value={{ checkoutItems, addItemToCheckoutList, handleSelectedCategory, selectedProducts ,products}}>
-			{children}
-		</ProductsContext.Provider>)
+    return (
+        <ProductsContext.Provider value={{ checkoutList, addToCheckout, handleSelectedCategory, selectedProducts, setSelectedProducts, incrementAmount, decrementAmount, products, removeProductFromList }}>
+            {children}
+        </ProductsContext.Provider>)
 }
-
 export { ProductsContext, ProductsProvider };
