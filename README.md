@@ -1,10 +1,10 @@
 ## Technologies used
-- **React: For building the user interface.
-- **TypeScript: For static typing.
-- **Firebase Firestore: For storing and retrieving data.
-- **Firebase Authentication: For user authentication.
-- **Firebase Hosting: For deploying the app.
-- **TailwindCSS: For styling (if applicable).
+- React: For building the user interface.
+- TypeScript: For static typing.
+- Firebase Firestore: For storing and retrieving data.
+- Firebase Authentication: For user authentication.
+- Firebase Hosting: For deploying the app.
+- TailwindCSS: For styling (if applicable).
 
 # React TypeScript App with Firestore
 A web application built with React, TypeScript, and Firebase Firestore that features user authentication, product pages, and review functionality.
